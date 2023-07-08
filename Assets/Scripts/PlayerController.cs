@@ -17,7 +17,10 @@ public class PlayerController : MonoBehaviour
     private Vector3 playerDirection = new(0, 0, 1);
     private Vector3 playerRotation = new(0, 0, 0);
     private float playerVelocity = 0f;
-    private float maxPlayerVelocity = 4f;
+    private float maxPlayerVelocity = 2f;
+
+    private float playerTilt = 0;
+    private string playerTiltDirection = "left";
 
     void Awake()
     {
@@ -47,6 +50,101 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
+        // NORBERT TEST START
+        if(Mathf.Abs(playerTilt) == 90) { // you dead bro
+            return;
+        }
+
+        float tiltCriticalRangeForMovingForwardTiltDirectionChange = 12f; // just an arbitrary tilt max value
+        float tiltCriticalRangeForFalling = 35f; // just an arbitrary tilt max value
+        float tiltForce = 25f + (50f * (playerVelocity / 3)); // 25,30,3 = values that were meant to make tilting look good. but they should be still adjusted
+
+        if(Mathf.Abs(playerTilt) >= tiltCriticalRangeForFalling) { // you dead bro
+
+            float newTiltForFalling;
+
+            if(playerTilt > 0) {
+              newTiltForFalling = playerTilt + (tiltForce * 5 * Time.deltaTime); // * 5 to fall like a freakin brick
+
+              if(newTiltForFalling > 90) {
+                  playerTilt = 90;
+              } else {
+                  playerTilt = newTiltForFalling;
+              }
+            }
+
+            if(playerTilt < 0) {
+              newTiltForFalling = playerTilt - (tiltForce * 5 * Time.deltaTime); // * 5 to fall like a freakin brick
+
+              if(newTiltForFalling < -90) {
+                  playerTilt = -90;
+              } else {
+                  playerTilt = newTiltForFalling;
+              }
+            }
+
+            // set rotation to tilt value
+            playerRotation.z = playerTilt;
+
+            // this is shit, I just copy pasted it from the bottom part of the function, sorry :(
+            playerVelocity = 0; // stop the train
+            transform.eulerAngles = playerRotation;
+            playerVelocity = Mathf.Clamp(playerVelocity, -maxPlayerVelocity, maxPlayerVelocity);
+            playerRigidBody.velocity = Vector3.Scale(playerVelocity*Vector3.one, transform.forward.normalized);
+
+            return;
+        }
+
+        // change left-right tilt when turning or when going forward
+        if((playerTilt >= tiltCriticalRangeForMovingForwardTiltDirectionChange && rotationValue == 0) || rotationValue < 0) {
+            playerTiltDirection = "right";
+        }
+        if((playerTilt <= -tiltCriticalRangeForMovingForwardTiltDirectionChange && rotationValue == 0) || rotationValue > 0) {
+            playerTiltDirection = "left";
+        }
+
+        // movin` so tiltin`
+        if(forwardVelocityValue != 0 || rotationValue != 0) {
+            if(playerTiltDirection == "left") {
+                playerTilt += tiltForce * Time.deltaTime;
+            }
+            if(playerTiltDirection == "right") {
+                playerTilt -= tiltForce * Time.deltaTime;
+            }
+        }
+
+        // not movin` so straightin` up
+        if(forwardVelocityValue == 0 && rotationValue == 0) {
+            float newTilt;
+
+            if(playerTilt < 0) {
+                newTilt = playerTilt + (tiltForce * Time.deltaTime);
+
+                if(newTilt > 2) {
+                    playerTilt = 0;
+                } else {
+                    playerTilt = newTilt;
+                }
+            }
+
+            if(playerTilt > 0) {
+                newTilt = playerTilt - (tiltForce * Time.deltaTime);
+
+                if(newTilt < 0) {
+                    playerTilt = 0;
+                } else {
+                    playerTilt = newTilt;
+                }
+            }
+        }
+
+
+        // set rotation to tilt value
+        playerRotation.z = playerTilt;
+
+        // NORBERT TEST END
+
+
         playerRotation.y += rotationValue * 100f * Time.deltaTime;
         playerVelocity += forwardVelocityValue * 5f * Time.deltaTime;
         BleedMomentum(5f);
