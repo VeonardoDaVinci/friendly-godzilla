@@ -77,6 +77,7 @@ public class HouseController : MonoBehaviour
                 RandomizationManager.Instance.ObjectsSpawned.Remove(other.gameObject);
                 Destroy(other.gameObject);
                 PlayerController.Instance.IsHolding = false;
+                PlayerController.Instance.IncreaseMaxSpeed();
                 RandomizationManager.Instance.SpawnNewObject();
             }
         }
