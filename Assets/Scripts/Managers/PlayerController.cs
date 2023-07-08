@@ -34,6 +34,11 @@ public class PlayerController : MonoBehaviour
         Instance = this;
     }
 
+    public void IncreaseMaxSpeed()
+    {
+        maxPlayerVelocity += 1f;
+    }
+
     private void Start()
     {
         playerRigidBody = GetComponent<Rigidbody>();
@@ -190,6 +195,7 @@ public class PlayerController : MonoBehaviour
         transform.eulerAngles = playerRotation;
         playerVelocity = Mathf.Clamp(playerVelocity, -maxPlayerVelocity, maxPlayerVelocity);
         playerRigidBody.velocity = Vector3.Scale(playerVelocity*Vector3.one, transform.forward.normalized);
+        LimitPlayerPosition();
     }
 
     private void DoWalkingShakeWithShakeDebounce()
@@ -210,6 +216,7 @@ public class PlayerController : MonoBehaviour
             forwardVelocityValue = -1f;
         }
     }
+
     private void MovementEnd(InputAction.CallbackContext callbackContext)
     {
         forwardVelocityValue = 0f;
@@ -249,5 +256,10 @@ public class PlayerController : MonoBehaviour
                 playerVelocity +=  bleedIntensity * Time.deltaTime;
             }
         }
+    }
+
+    private void LimitPlayerPosition()
+    {
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -13f, 13f),transform.position.y, Mathf.Clamp(transform.position.z, -10f, 10f));
     }
 }
