@@ -27,6 +27,8 @@ public class PlayerController : MonoBehaviour
     private float playerTilt = 0;
     private string playerTiltDirection = "left";
 
+    private bool standingUpInProgress = false;
+
     void Awake()
     {
         Instance = this;
@@ -59,14 +61,14 @@ public class PlayerController : MonoBehaviour
 
         // dead if dead
         if(Mathf.Abs(playerTilt) == 90) { // you dead bro
-            return;
+            standingUpInProgress = true;
         }
 
         float tiltCriticalRangeForMovingForwardTiltDirectionChange = 12f; // just an arbitrary tilt max value
         float tiltCriticalRangeForFalling = 35f; // just an arbitrary tilt max value
         float tiltForce = 25f + (50f * (Mathf.Abs(playerVelocity) / 3)); // 25,30,3 = values that were meant to make tilting look good. but they should be still adjusted
 
-        if(Mathf.Abs(playerTilt) >= tiltCriticalRangeForFalling) { // you dead bro
+        if(Mathf.Abs(playerTilt) >= tiltCriticalRangeForFalling && !standingUpInProgress) { // you dead bro
 
             float newTiltForFalling;
 
@@ -105,7 +107,9 @@ public class PlayerController : MonoBehaviour
         }
 
         // change left-right tilt when turning or when going forward
-        if((playerTilt >= tiltCriticalRangeForMovingForwardTiltDirectionChange && rotationValue == 0) || rotationValue < 0) {
+        if((playerTilt >= tiltCriticalRangeForMovingForwardTiltDirectionChange && rotationValue == 0)
+            || rotationValue < 0
+            || (standingUpInProgress && playerTiltDirection == "left")) {
             // camera shake when walking
             if(((int)Mathf.Abs(playerTilt) == tiltCriticalRangeForMovingForwardTiltDirectionChange) && rotationValue == 0) {
                 DoWalkingShakeWithShakeDebounce();
@@ -113,7 +117,9 @@ public class PlayerController : MonoBehaviour
 
             playerTiltDirection = "right";
         }
-        if((playerTilt <= -tiltCriticalRangeForMovingForwardTiltDirectionChange && rotationValue == 0) || rotationValue > 0) {
+        if((playerTilt <= -tiltCriticalRangeForMovingForwardTiltDirectionChange && rotationValue == 0)
+            || rotationValue > 0
+            || (standingUpInProgress && playerTiltDirection == "right")) {
             // camera shake when walking
             if(((int)Mathf.Abs(playerTilt) == tiltCriticalRangeForMovingForwardTiltDirectionChange) && rotationValue == 0) {
                 DoWalkingShakeWithShakeDebounce();
@@ -149,6 +155,7 @@ public class PlayerController : MonoBehaviour
 
                 if(newTilt > 2) {
                     playerTilt = 0;
+                    standingUpInProgress = false;
                 } else {
                     playerTilt = newTilt;
                 }
@@ -159,6 +166,7 @@ public class PlayerController : MonoBehaviour
 
                 if(newTilt < 0) {
                     playerTilt = 0;
+                    standingUpInProgress = false;
                 } else {
                     playerTilt = newTilt;
                 }
@@ -167,6 +175,11 @@ public class PlayerController : MonoBehaviour
 
         // set rotation to tilt value
         playerRotation.z = playerTilt;
+
+        if(standingUpInProgress) {
+            rotationValue = 0;
+            forwardVelocityValue = 0;
+        }
 
         // NORBERT TEST END
 
