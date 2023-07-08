@@ -17,7 +17,7 @@ public class HouseController : MonoBehaviour
     public GameObject rebuiltVariant;
     public GameObject prebuiltVariant;
 
-    private void Start()
+    private void OnEnable()
     {
         switch (CurrentHouseState)
         {
@@ -65,21 +65,25 @@ public class HouseController : MonoBehaviour
             {
                 Camera.main.transform.DOShakePosition(0.2f,3,50);
                 DestroyBuilding();
+                RandomizationManager.Instance.SpawnNewObject();
+            }
+        }
+        if (other.CompareTag("Brick"))
+        {
+            if (CurrentHouseState == HouseState.Prebuilt)
+            {
+                RebuildBuilding();
+                Camera.main.transform.DOShakePosition(0.1f, 1, 50);
+                RandomizationManager.Instance.ObjectsSpawned.Remove(other.gameObject);
+                Destroy(other.gameObject);
+                PlayerController.Instance.IsHolding = false;
+                RandomizationManager.Instance.SpawnNewObject();
             }
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.CompareTag("Brick"))
-        {
-            if (CurrentHouseState == HouseState.Prebuilt)
-            {
-                RebuildBuilding();
-                Camera.main.transform.DOShakePosition(0.1f,1,50);
-                Destroy(collision.collider.gameObject);
-                PlayerController.Instance.IsHolding = false;
-            }
-        }
+        
     }
 }

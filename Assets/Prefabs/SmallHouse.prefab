@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8817383308509517008}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.48, y: 1, z: 3.03}
+  m_LocalPosition: {x: 1.48, y: 0, z: 3.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -34,7 +34,7 @@ Transform:
   - {fileID: 1766452029545680256}
   - {fileID: 4942795413335883834}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &4143389054025931201
 BoxCollider:
@@ -51,12 +51,12 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1.4503107, y: 2.0114918, z: 1.4034686}
+  m_Center: {x: -0.006085396, y: 1.0128992, z: 0.009606361}
 --- !u!114 &7438060206191758730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99,7 +99,7 @@ PrefabInstance:
     - target: {fileID: 6566058318105952950, guid: 44ba8915255a37a45bfa29962ecb3316,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6566058318105952950, guid: 44ba8915255a37a45bfa29962ecb3316,
         type: 3}
@@ -179,7 +179,7 @@ PrefabInstance:
     - target: {fileID: 4249001456675793483, guid: 44eafcfef08cb0148ba8ab34da91ae8c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4249001456675793483, guid: 44eafcfef08cb0148ba8ab34da91ae8c,
         type: 3}
@@ -269,7 +269,7 @@ PrefabInstance:
     - target: {fileID: 8721264552441147805, guid: 445962a94e2319d4daf3f26df795178d,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8721264552441147805, guid: 445962a94e2319d4daf3f26df795178d,
         type: 3}
