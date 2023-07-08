@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using DG.Tweening;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,6 +10,10 @@ public class PlayerController : MonoBehaviour
 
     public GameObject Hands;
     public bool IsHolding = false;
+
+    [SerializeField] private GameObject rightLeg;
+    [SerializeField] private GameObject leftLeg;
+
     [SerializeField] private InputAction movement;
     [SerializeField] private InputAction rotation;
     private Rigidbody playerRigidBody;
@@ -57,7 +62,7 @@ public class PlayerController : MonoBehaviour
 
         float tiltCriticalRangeForMovingForwardTiltDirectionChange = 12f; // just an arbitrary tilt max value
         float tiltCriticalRangeForFalling = 35f; // just an arbitrary tilt max value
-        float tiltForce = 25f + (50f * (playerVelocity / 3)); // 25,30,3 = values that were meant to make tilting look good. but they should be still adjusted
+        float tiltForce = 25f + (50f * (Mathf.Abs(playerVelocity) / 3)); // 25,30,3 = values that were meant to make tilting look good. but they should be still adjusted
 
         if(Mathf.Abs(playerTilt) >= tiltCriticalRangeForFalling) { // you dead bro
 
@@ -68,6 +73,7 @@ public class PlayerController : MonoBehaviour
 
               if(newTiltForFalling > 90) {
                   playerTilt = 90;
+                  Camera.main.transform.DOShakePosition(0.1f,1,50);
               } else {
                   playerTilt = newTiltForFalling;
               }
@@ -78,6 +84,7 @@ public class PlayerController : MonoBehaviour
 
               if(newTiltForFalling < -90) {
                   playerTilt = -90;
+                  Camera.main.transform.DOShakePosition(0.1f,1,50);
               } else {
                   playerTilt = newTiltForFalling;
               }
@@ -97,9 +104,19 @@ public class PlayerController : MonoBehaviour
 
         // change left-right tilt when turning or when going forward
         if((playerTilt >= tiltCriticalRangeForMovingForwardTiltDirectionChange && rotationValue == 0) || rotationValue < 0) {
+            if((playerTilt >= tiltCriticalRangeForMovingForwardTiltDirectionChange && rotationValue == 0)) {
+
+                Camera.main.transform.DOShakePosition(0.1f,0.1f,50);
+            }
+
             playerTiltDirection = "right";
         }
         if((playerTilt <= -tiltCriticalRangeForMovingForwardTiltDirectionChange && rotationValue == 0) || rotationValue > 0) {
+            if((playerTilt <= tiltCriticalRangeForMovingForwardTiltDirectionChange && rotationValue == 0)) {
+
+                Camera.main.transform.DOShakePosition(0.1f,0.1f,50);
+            }
+
             playerTiltDirection = "left";
         }
 
@@ -112,6 +129,14 @@ public class PlayerController : MonoBehaviour
                 playerTilt -= tiltForce * Time.deltaTime;
             }
         }
+
+        float maxRightLegAngle = 145;
+        Vector3 rotationRightLeg = new Vector3(0, 0, 180 - ((180 - maxRightLegAngle) / (tiltCriticalRangeForMovingForwardTiltDirectionChange * 2)) * playerTilt);
+        rightLeg.transform.localEulerAngles = rotationRightLeg;
+
+        float maxLeftLegAngle = -35;
+        Vector3 rotationLeftLeg = new Vector3(0, 0, 0 + ((0 - maxLeftLegAngle) / (tiltCriticalRangeForMovingForwardTiltDirectionChange * 2)) * playerTilt);
+        leftLeg.transform.localEulerAngles = rotationLeftLeg;
 
         // not movin` so straightin` up
         if(forwardVelocityValue == 0 && rotationValue == 0) {
