@@ -56,6 +56,8 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         // NORBERT TEST START
+
+        // dead if dead
         if(Mathf.Abs(playerTilt) == 90) { // you dead bro
             return;
         }
@@ -104,17 +106,17 @@ public class PlayerController : MonoBehaviour
 
         // change left-right tilt when turning or when going forward
         if((playerTilt >= tiltCriticalRangeForMovingForwardTiltDirectionChange && rotationValue == 0) || rotationValue < 0) {
-            if((playerTilt >= tiltCriticalRangeForMovingForwardTiltDirectionChange && rotationValue == 0)) {
-
-                Camera.main.transform.DOShakePosition(0.1f,0.1f,50);
+            // camera shake when walking
+            if(((int)Mathf.Abs(playerTilt) == tiltCriticalRangeForMovingForwardTiltDirectionChange) && rotationValue == 0) {
+                DoWalkingShakeWithShakeDebounce();
             }
 
             playerTiltDirection = "right";
         }
         if((playerTilt <= -tiltCriticalRangeForMovingForwardTiltDirectionChange && rotationValue == 0) || rotationValue > 0) {
-            if((playerTilt <= tiltCriticalRangeForMovingForwardTiltDirectionChange && rotationValue == 0)) {
-
-                Camera.main.transform.DOShakePosition(0.1f,0.1f,50);
+            // camera shake when walking
+            if(((int)Mathf.Abs(playerTilt) == tiltCriticalRangeForMovingForwardTiltDirectionChange) && rotationValue == 0) {
+                DoWalkingShakeWithShakeDebounce();
             }
 
             playerTiltDirection = "left";
@@ -163,7 +165,6 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-
         // set rotation to tilt value
         playerRotation.z = playerTilt;
 
@@ -177,6 +178,14 @@ public class PlayerController : MonoBehaviour
         playerVelocity = Mathf.Clamp(playerVelocity, -maxPlayerVelocity, maxPlayerVelocity);
         playerRigidBody.velocity = Vector3.Scale(playerVelocity*Vector3.one, transform.forward.normalized);
     }
+
+    private void DoWalkingShakeWithShakeDebounce()
+    {
+        Debug.Log("do shake !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+        Camera.main.transform.DOShakePosition(0.1f,0.1f,50);
+    }
+
     private void MovementStart(InputAction.CallbackContext callbackContext)
     {
         if (callbackContext.ReadValue<float>() > 0f)
