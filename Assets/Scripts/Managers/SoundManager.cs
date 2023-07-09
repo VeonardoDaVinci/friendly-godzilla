@@ -1,18 +1,45 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class SoundManager : MonoBehaviour
+public class SoundManager : PersistentSingleton<SoundManager>
 {
-    // Start is called before the first frame update
-    void Start()
+    public AudioSource ThudSource;
+    public AudioSource ClickSource;
+    public AudioSource RoarSource;
+    public AudioSource RubbleSource;
+    public AudioSource ScoreSource;
+    private IEnumerator DestroySourceAfterTime(AudioSource audioSource)
     {
-        
+        yield return new WaitForSeconds(1.5f);
+        Destroy(audioSource);
+    }
+    public void PlayThud()
+    {
+        AudioSource ad = gameObject.AddComponent<AudioSource>();
+        ad.clip = ThudSource.clip;
+        ad.Play();
+        StartCoroutine(DestroySourceAfterTime(ad));
     }
 
-    // Update is called once per frame
-    void Update()
+    public void PlayRoar()
     {
-        
+        RoarSource.pitch = 1.1f - Random.value / 5f;
+        RoarSource.Play();
+    }
+
+    public void PlayRubble()
+    {
+        RubbleSource.pitch = 1.1f - Random.value / 5f;
+        RubbleSource.Play();
+    }
+
+    public void PlayClick()
+    {
+        ClickSource.Play();
+    }
+
+    public void PlayScore()
+    {
+        ScoreSource.Play();
     }
 }

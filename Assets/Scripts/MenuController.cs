@@ -5,6 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class MenuController : MonoBehaviour
 {
+    public void PlayClick()
+    {
+        SoundManager.Instance.PlayClick();
+    }
     public void LoadLevel()
     {
         SceneManager.LoadScene(1);

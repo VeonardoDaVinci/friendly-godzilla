@@ -51,8 +51,14 @@ public class PlayerController : MonoBehaviour
         DOTween.To(() => healthImage.fillAmount, x => healthImage.fillAmount = x, playerHealth/maxHealth, 0.2f);
         if (playerHealth <= 0 )
         {
-            SceneManager.LoadScene(2);
+            StartCoroutine(DeathRoutine());
         }
+    }
+
+    private IEnumerator DeathRoutine()
+    {
+        yield return new WaitForSeconds(0.5f);
+        SceneManager.LoadScene(2);
     }
 
     private void Start()
@@ -224,6 +230,7 @@ public class PlayerController : MonoBehaviour
         Debug.Log("do shake !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
         Camera.main.transform.DOShakePosition(0.1f,0.1f,50);
+        SoundManager.Instance.PlayThud();
     }
 
     private void MovementStart(InputAction.CallbackContext callbackContext)

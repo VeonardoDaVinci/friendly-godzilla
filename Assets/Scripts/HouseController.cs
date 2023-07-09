@@ -63,6 +63,7 @@ public class HouseController : MonoBehaviour
         {
             if(CurrentHouseState == HouseState.Rebuilt || CurrentHouseState == HouseState.Prebuilt)
             {
+                SoundManager.Instance.PlayRubble();
                 Camera.main.transform.DOShakePosition(0.2f,3,50);
                 if(CurrentHouseState!= HouseState.Rebuilt)
                 {
@@ -83,6 +84,7 @@ public class HouseController : MonoBehaviour
             if (CurrentHouseState == HouseState.Prebuilt)
             {
                 RebuildBuilding();
+                SoundManager.Instance.PlayRoar();
                 Camera.main.transform.DOShakePosition(0.1f, 1, 50);
                 RandomizationManager.Instance.ObjectsSpawned.Remove(other.gameObject);
                 Destroy(other.gameObject);
@@ -91,7 +93,8 @@ public class HouseController : MonoBehaviour
                 RandomizationManager.Instance.SpawnNewObject();
 
                 ScoreManager.Instance.BuildingsRebuilt++;
-                ScoreManager.Instance.AddScore(10);
+                ScoreManager.Instance.AddScore(25);
+                SoundManager.Instance.PlayScore();
                 if((RandomizationManager.Instance.HousesSpawned.Count-1)%5==0)
                 {
                     ScoreManager.Instance.AddScore(100);
