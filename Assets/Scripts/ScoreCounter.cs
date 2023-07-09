@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -15,5 +16,10 @@ public class ScoreCounter : Singleton<ScoreCounter>
     public void ChangeScoreText(string scr)
     {
         scoreText.text = scr;
+    }
+
+    public void ShakeCounter()
+    {
+        scoreText.transform.DOShakeScale(0.2f);
     }
 }

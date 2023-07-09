@@ -43,6 +43,9 @@ public class ScoreManager : PersistentSingleton<ScoreManager>
         {
             CurrentScore = 0;
         }
-        ScoreCounter.Instance.ChangeScoreText(CurrentScore.ToString());
+        else
+        {
+            ScoreCounter.Instance.ChangeScoreText(CurrentScore.ToString());
+        }
     }
 }

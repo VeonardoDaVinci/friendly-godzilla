@@ -24,13 +24,13 @@ public class RandomizationManager : Singleton<RandomizationManager>
 
     public void IncreaseSpawnRange(float range)
     {
-        SpawnRangeX += range * (4f / 3f);
-        SpawnRangeZ += range;
+        SpawnRangeX += range * (4f / 3f) * 0.9f;
+        SpawnRangeZ += range * 0.9f;
     }
 
-    public void SpawnNewObject()
+    public void SpawnNewObject(bool withBrick = true)
     {
-        if (!anySpaceLeft || ObjectsSpawned.Count>=25) { SceneManager.LoadScene(2); }
+        if (!anySpaceLeft) { SceneManager.LoadScene(2); }
 
         int chance = Random.Range(0, 100);
         int index = Random.Range(0, BuildingVariants.Count);
@@ -48,7 +48,10 @@ public class RandomizationManager : Singleton<RandomizationManager>
         anySpaceLeft = CheckIfAnySpaceIsLeft();
         ObjectsSpawned.Add(spawnedObject);
         HousesSpawned.Add(spawnedObject);
-        SpawnNewObject(Brick);
+        if (withBrick)
+        {
+            SpawnNewObject(Brick);
+        }
         SpawnedBuildingCount++;
     }
 
@@ -84,6 +87,11 @@ public class RandomizationManager : Singleton<RandomizationManager>
 
         return spawnedObject;
         
+    }
+
+    public void SpawnBrick()
+    {
+        SpawnNewObject(Brick);
     }
 
     public void SpawnNewObject(GameObject preferedGameObject)

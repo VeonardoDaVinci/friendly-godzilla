@@ -46,13 +46,24 @@ public class PlayerController : MonoBehaviour
         maxPlayerVelocity += 1f;
     }
 
-    public void RemoveHealth(float health)
+    public void DecreaseHealth(float health)
     {
         playerHealth -= health;
         DOTween.To(() => healthImage.fillAmount, x => healthImage.fillAmount = x, playerHealth/maxHealth, 0.2f);
         if (playerHealth <= 0 )
         {
             StartCoroutine(DeathRoutine());
+        }
+    }
+
+    public void IncreaseHealth(float health)
+    {
+        playerHealth += health;
+        DOTween.To(() => healthImage.fillAmount, x => healthImage.fillAmount = x, playerHealth / maxHealth, 0.2f);
+        healthImage.transform.DOShakeScale(0.2f);
+        if (playerHealth > maxHealth)
+        {
+            playerHealth= maxHealth;
         }
     }
 
