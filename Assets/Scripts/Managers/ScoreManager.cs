@@ -5,12 +5,23 @@ using UnityEngine;
 
 public class ScoreManager : PersistentSingleton<ScoreManager>
 {
-    public int CurrnetScore = 0;
+    public int CurrentScore = 0;
     public int HighestScore = 0;
 
     public int BuildingsRebuilt = 0;
     public int BuildingDestroyed = 0;
-    public TextMeshProUGUI ScoreText;
+
+    private void Start()
+    {
+        LevelManager.LevelLoaded += ResetScore;
+    }
+
+    public void ResetScore()
+    {
+        CurrentScore = 0;
+        BuildingsRebuilt = 0;
+        BuildingDestroyed = 0;
+    }
     public IEnumerator RemoveScoreOverTime()
     {
         while(true)
@@ -21,17 +32,17 @@ public class ScoreManager : PersistentSingleton<ScoreManager>
     }
     public void AddScore(int scr)
     {
-        CurrnetScore += scr;
-        ScoreText.text = CurrnetScore.ToString();
+        CurrentScore += scr;
+        ScoreCounter.Instance.ChangeScoreText(CurrentScore.ToString());
     }
 
     public void RemoveScore(int scr)
     {
-        CurrnetScore -= scr;
-        if(CurrnetScore < 0 )
+        CurrentScore -= scr;
+        if(CurrentScore < 0 )
         {
-            CurrnetScore = 0;
+            CurrentScore = 0;
         }
-        ScoreText.text = CurrnetScore.ToString();
+        ScoreCounter.Instance.ChangeScoreText(CurrentScore.ToString());
     }
 }
