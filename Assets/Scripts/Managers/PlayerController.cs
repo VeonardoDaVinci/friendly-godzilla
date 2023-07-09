@@ -48,8 +48,8 @@ public class PlayerController : MonoBehaviour
     public void RemoveHealth(float health)
     {
         playerHealth -= health;
-        healthImage.fillAmount = playerHealth / maxHealth;
-        if(playerHealth <= 0 )
+        DOTween.To(() => healthImage.fillAmount, x => healthImage.fillAmount = x, playerHealth/maxHealth, 0.2f);
+        if (playerHealth <= 0 )
         {
             SceneManager.LoadScene(2);
         }
@@ -57,7 +57,11 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        playerHealth = maxHealth;
+        if(SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            playerHealth = maxHealth;
+            StartCoroutine(ScoreManager.Instance.RemoveScoreOverTime());
+        }
         playerRigidBody = GetComponent<Rigidbody>();
         playerDirection = transform.forward.normalized;
         movement.performed += MovementStart;

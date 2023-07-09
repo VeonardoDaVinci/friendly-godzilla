@@ -11,6 +11,14 @@ public class ScoreManager : PersistentSingleton<ScoreManager>
     public int BuildingsRebuilt = 0;
     public int BuildingDestroyed = 0;
     public TextMeshProUGUI ScoreText;
+    public IEnumerator RemoveScoreOverTime()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(1f);
+            RemoveScore(1);
+        }
+    }
     public void AddScore(int scr)
     {
         CurrnetScore += scr;
