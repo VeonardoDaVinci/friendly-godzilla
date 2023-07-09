@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class PlayerController : MonoBehaviour
 {
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 playerRotation = new(0, 0, 0);
     private float playerVelocity = 0f;
     private float maxPlayerVelocity = 2f;
+    private float veloctityBleedModifier = 1f;
     private float maxHealth = 10f;
     private float playerHealth;
     private Vector2 maxPlayerRange = new Vector2(13f, 10f);
@@ -39,6 +41,19 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         Instance = this;
+    }
+
+    public void ChangePlayerHolding(bool holding)
+    {
+        IsHolding= holding;
+        if(IsHolding)
+        {
+            veloctityBleedModifier = 0.5f;
+        }
+        else
+        {
+            veloctityBleedModifier = 1f;
+        }
     }
 
     public void IncreaseMaxSpeed()
@@ -229,7 +244,7 @@ public class PlayerController : MonoBehaviour
 
 
         playerRotation.y += rotationValue * 100f * Time.deltaTime;
-        playerVelocity += forwardVelocityValue * 5f * Time.deltaTime;
+        playerVelocity += forwardVelocityValue * 5f * Time.deltaTime * veloctityBleedModifier;
         BleedMomentum(5f);
         transform.eulerAngles = playerRotation;
         playerVelocity = Mathf.Clamp(playerVelocity, -maxPlayerVelocity, maxPlayerVelocity);
@@ -302,11 +317,11 @@ public class PlayerController : MonoBehaviour
             }
             else if(playerVelocity > 0f)
             {
-                playerVelocity -=  bleedIntensity * Time.deltaTime;
+                playerVelocity -=  bleedIntensity * Time.deltaTime * veloctityBleedModifier;
             }
             else if(playerVelocity < 0f)
             {
-                playerVelocity +=  bleedIntensity * Time.deltaTime;
+                playerVelocity +=  bleedIntensity * Time.deltaTime * veloctityBleedModifier;
             }
         }
     }

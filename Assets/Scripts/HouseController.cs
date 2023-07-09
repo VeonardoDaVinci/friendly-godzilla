@@ -88,7 +88,7 @@ public class HouseController : MonoBehaviour
                 Camera.main.transform.DOShakePosition(0.1f, 1, 50);
                 RandomizationManager.Instance.ObjectsSpawned.Remove(other.gameObject);
                 Destroy(other.gameObject);
-                PlayerController.Instance.IsHolding = false;
+                PlayerController.Instance.ChangePlayerHolding(false);
                 PlayerController.Instance.IncreaseMaxSpeed();
                 RandomizationManager.Instance.SpawnNewObject();
 
@@ -96,6 +96,7 @@ public class HouseController : MonoBehaviour
                 ScoreManager.Instance.AddScore(25);
                 SoundManager.Instance.PlayScore();
                 PlayerController.Instance.IncreasePlayerSize(0.04f);
+
                 if((RandomizationManager.Instance.HousesSpawned.Count-1)%5==0)
                 {
                     PlayerController.Instance.IncreasePlayerRange(1f);

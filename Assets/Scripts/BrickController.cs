@@ -12,7 +12,7 @@ public class BrickController : MonoBehaviour
             transform.parent = PlayerController.Instance.Hands.transform;
             transform.localPosition = Vector3.zero;
             transform.localEulerAngles= new(0f,90f,0f);
-            PlayerController.Instance.IsHolding = true;
+            PlayerController.Instance.ChangePlayerHolding(true);
         }
     }
 }
