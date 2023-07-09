@@ -35,9 +35,9 @@ public class RandomizationManager : Singleton<RandomizationManager>
     {
         if (!anySpaceLeft) { SceneManager.LoadScene(2); }
 
-        int chance = Random.Range(0, 100);
         int index = Random.Range(0, BuildingVariants.Count);
         GameObject spawnedObject;
+        int chance = Random.Range(0, 100);
         if(chance < 50)
         {
             spawnedObject = PlaceObjectInRandomSpace(index);
@@ -92,6 +92,20 @@ public class RandomizationManager : Singleton<RandomizationManager>
         
     }
 
+    private GameObject PlaceObjectInRandomSpace(GameObject chosenObject)
+    {
+        GameObject spawnedObject;
+        Vector3 newPosition = RandomPosition();
+        GameObject neighborhood = new GameObject();
+        Instantiate(neighborhood);
+        neighborhood.transform.position = newPosition;
+        spawnedObject = Instantiate(chosenObject, neighborhood.transform);
+        neighborhood.transform.localEulerAngles = RandomRotation();
+
+        return spawnedObject;
+
+    }
+
     public void SpawnBuiltHouse()
     {
         GameObject spawnedObject;
@@ -102,10 +116,18 @@ public class RandomizationManager : Singleton<RandomizationManager>
             newPosition = RandomPosition();
 
         }
+        int chance = Random.Range(0, 100);
+        if (chance < 25)
+        {
+            PlaceObjectInRandomSpace(BuiltHouse);
+            return;
+        }
+        
         spawnedObject = Instantiate(BuiltHouse, HousesSpawned[oldObjectindex].transform.parent);
         spawnedObject.transform.localPosition = newPosition;
         HousesSpawned.Add(spawnedObject);
         ObjectsSpawned.Add(spawnedObject);
+        SpawnedBuildingCount++;
     }
 
     public void SpawnBrick()

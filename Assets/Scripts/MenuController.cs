@@ -17,6 +17,11 @@ public class MenuController : MonoBehaviour
         LevelManager.Instance.LoadLevel();
     }
 
+    public void LoadTutorial()
+    {
+        LevelManager.Instance.LoadTutorial();
+    }
+
     public void LoadMenu()
     {
         LevelManager.Instance.LoadMenu();
