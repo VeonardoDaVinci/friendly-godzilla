@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class RandomizationManager : Singleton<RandomizationManager>
 {
@@ -11,6 +13,7 @@ public class RandomizationManager : Singleton<RandomizationManager>
     public List<GameObject> HousesSpawned;
     [SerializeField] private List<GameObject> BuildingVariants;
     [SerializeField] private GameObject Brick;
+    [SerializeField] private GameObject BuiltHouse;
     [SerializeField] private BoxCollider SpawnRange;
     private float SpawnRangeX;
     private float SpawnRangeZ;
@@ -24,8 +27,8 @@ public class RandomizationManager : Singleton<RandomizationManager>
 
     public void IncreaseSpawnRange(float range)
     {
-        SpawnRangeX += range * (4f / 3f) * 0.9f;
-        SpawnRangeZ += range * 0.9f;
+        SpawnRangeX += range * (4f / 3f) * 0.9f /2f;
+        SpawnRangeZ += range * 0.9f/2f;
     }
 
     public void SpawnNewObject(bool withBrick = true)
@@ -87,6 +90,22 @@ public class RandomizationManager : Singleton<RandomizationManager>
 
         return spawnedObject;
         
+    }
+
+    public void SpawnBuiltHouse()
+    {
+        GameObject spawnedObject;
+        int oldObjectindex = Random.Range(0, HousesSpawned.Count);
+        Vector3 newPosition = PositionClosebyBuilding(oldObjectindex);
+        if (newPosition == Vector3.zero)
+        {
+            newPosition = RandomPosition();
+
+        }
+        spawnedObject = Instantiate(BuiltHouse, HousesSpawned[oldObjectindex].transform.parent);
+        spawnedObject.transform.localPosition = newPosition;
+        HousesSpawned.Add(spawnedObject);
+        ObjectsSpawned.Add(spawnedObject);
     }
 
     public void SpawnBrick()

@@ -99,6 +99,10 @@ public class HouseController : MonoBehaviour
 
                 if((RandomizationManager.Instance.HousesSpawned.Count-1)%5==0)
                 {
+                    for(int i=0; i < 2*(RandomizationManager.Instance.HousesSpawned.Count / 5); i++)
+                    {
+                        RandomizationManager.Instance.SpawnBuiltHouse();
+                    }
                     PlayerController.Instance.IncreasePlayerRange(1f);
                     PlayerController.Instance.IncreaseHealth(2f);
                     RandomizationManager.Instance.IncreaseSpawnRange(1f);
