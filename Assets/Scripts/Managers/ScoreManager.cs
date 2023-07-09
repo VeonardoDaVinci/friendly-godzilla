@@ -1,18 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
-public class ScoreManager : MonoBehaviour
+public class ScoreManager : PersistentSingleton<ScoreManager>
 {
-    // Start is called before the first frame update
-    void Start()
+    public int CurrnetScore = 0;
+    public int HighestScore = 0;
+
+    public int BuildingsRebuilt = 0;
+    public int BuildingDestroyed = 0;
+    public TextMeshProUGUI ScoreText;
+    public void AddScore(int scr)
     {
-        
+        CurrnetScore += scr;
+        ScoreText.text = CurrnetScore.ToString();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void RemoveScore(int scr)
     {
-        
+        CurrnetScore -= scr;
+        if(CurrnetScore < 0 )
+        {
+            CurrnetScore = 0;
+        }
+        ScoreText.text = CurrnetScore.ToString();
     }
 }

@@ -64,8 +64,18 @@ public class HouseController : MonoBehaviour
             if(CurrentHouseState == HouseState.Rebuilt || CurrentHouseState == HouseState.Prebuilt)
             {
                 Camera.main.transform.DOShakePosition(0.2f,3,50);
+                if(CurrentHouseState!= HouseState.Rebuilt)
+                {
+                    PlayerController.Instance.RemoveHealth(2f);
+                }
+                else
+                {
+                    PlayerController.Instance.RemoveHealth(4f);
+                }
                 DestroyBuilding();
                 RandomizationManager.Instance.SpawnNewObject();
+                ScoreManager.Instance.RemoveScore(5);
+                ScoreManager.Instance.BuildingDestroyed++;
             }
         }
         if (other.CompareTag("Brick"))
@@ -79,6 +89,13 @@ public class HouseController : MonoBehaviour
                 PlayerController.Instance.IsHolding = false;
                 PlayerController.Instance.IncreaseMaxSpeed();
                 RandomizationManager.Instance.SpawnNewObject();
+
+                ScoreManager.Instance.BuildingsRebuilt++;
+                ScoreManager.Instance.AddScore(10);
+                if((RandomizationManager.Instance.HousesSpawned.Count-1)%5==0)
+                {
+                    ScoreManager.Instance.AddScore(100);
+                }
             }
         }
     }

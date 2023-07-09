@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -14,6 +16,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject rightLeg;
     [SerializeField] private GameObject leftLeg;
 
+    [SerializeField] private Image healthImage;
+
     [SerializeField] private InputAction movement;
     [SerializeField] private InputAction rotation;
     private Rigidbody playerRigidBody;
@@ -23,6 +27,8 @@ public class PlayerController : MonoBehaviour
     private Vector3 playerRotation = new(0, 0, 0);
     private float playerVelocity = 0f;
     private float maxPlayerVelocity = 2f;
+    private float maxHealth = 10f;
+    private float playerHealth;
 
     private float playerTilt = 0;
     private string playerTiltDirection = "left";
@@ -39,8 +45,19 @@ public class PlayerController : MonoBehaviour
         maxPlayerVelocity += 1f;
     }
 
+    public void RemoveHealth(float health)
+    {
+        playerHealth -= health;
+        healthImage.fillAmount = playerHealth / maxHealth;
+        if(playerHealth <= 0 )
+        {
+            SceneManager.LoadScene(2);
+        }
+    }
+
     private void Start()
     {
+        playerHealth = maxHealth;
         playerRigidBody = GetComponent<Rigidbody>();
         playerDirection = transform.forward.normalized;
         movement.performed += MovementStart;

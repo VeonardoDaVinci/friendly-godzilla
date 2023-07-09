@@ -23,7 +23,8 @@ public class RandomizationManager : Singleton<RandomizationManager>
     }
     public void SpawnNewObject()
     {
-        if (!anySpaceLeft) { SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); }
+        if (!anySpaceLeft || ObjectsSpawned.Count>=25) { SceneManager.LoadScene(2); }
+
         int chance = Random.Range(0, 100);
         int index = Random.Range(0, BuildingVariants.Count);
         GameObject spawnedObject;
