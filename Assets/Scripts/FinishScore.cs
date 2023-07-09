@@ -10,10 +10,9 @@ public class FinishScore : MonoBehaviour
     [SerializeField] TextMeshProUGUI completeScore;
     void Start()
     {
-        ScoreManager.Instance.ScoreText = FindObjectOfType<TextMeshProUGUI>();
         buildingScore.text = ScoreManager.Instance.BuildingsRebuilt.ToString();
         rubbleScore.text = ScoreManager.Instance.BuildingDestroyed.ToString();
-        completeScore.text = ScoreManager.Instance.CurrnetScore.ToString();
+        completeScore.text = ScoreManager.Instance.CurrentScore.ToString();
 
     }
 }

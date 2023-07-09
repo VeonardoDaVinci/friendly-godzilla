@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class MenuController : MonoBehaviour
 {
+    
     // :)
     public void PlayClick()
     {
@@ -12,16 +14,16 @@ public class MenuController : MonoBehaviour
     }
     public void LoadLevel()
     {
-        SceneManager.LoadScene(1);
+        LevelManager.Instance.LoadLevel();
     }
 
     public void LoadMenu()
     {
-        SceneManager.LoadScene(0);
+        LevelManager.Instance.LoadMenu();
     }
 
     public void LoadFinishScreen()
     {
-        SceneManager.LoadScene(2);
+        LevelManager.Instance.LoadFinishScreen();
     }
 }

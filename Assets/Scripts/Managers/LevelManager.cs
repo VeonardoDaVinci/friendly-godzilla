@@ -1,18 +1,25 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class LevelManager : MonoBehaviour
+public class LevelManager : PersistentSingleton<LevelManager>
 {
-    // Start is called before the first frame update
-    void Start()
+    public static event Action LevelLoaded;
+    public void LoadLevel()
     {
-        
+        SceneManager.LoadScene(1);
+        LevelLoaded?.Invoke();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void LoadMenu()
     {
-        
+        SceneManager.LoadScene(0);
+    }
+
+    public void LoadFinishScreen()
+    {
+        SceneManager.LoadScene(2);
     }
 }
