@@ -95,8 +95,12 @@ public class HouseController : MonoBehaviour
                 ScoreManager.Instance.BuildingsRebuilt++;
                 ScoreManager.Instance.AddScore(25);
                 SoundManager.Instance.PlayScore();
+                PlayerController.Instance.IncreasePlayerSize(0.04f);
                 if((RandomizationManager.Instance.HousesSpawned.Count-1)%5==0)
                 {
+                    PlayerController.Instance.IncreasePlayerRange(1f);
+                    RandomizationManager.Instance.IncreaseSpawnRange(1f);
+                    DOTween.To(() => Camera.main.orthographicSize, x => Camera.main.orthographicSize = x, Camera.main.orthographicSize+0.5f, 1f);
                     ScoreManager.Instance.AddScore(100);
                 }
             }

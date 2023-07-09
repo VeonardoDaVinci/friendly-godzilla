@@ -8,6 +8,7 @@ public class SoundManager : PersistentSingleton<SoundManager>
     public AudioSource RoarSource;
     public AudioSource RubbleSource;
     public AudioSource ScoreSource;
+    public float BaseRoarPitch = 1f;
     private IEnumerator DestroySourceAfterTime(AudioSource audioSource)
     {
         yield return new WaitForSeconds(1.5f);
@@ -23,7 +24,7 @@ public class SoundManager : PersistentSingleton<SoundManager>
 
     public void PlayRoar()
     {
-        RoarSource.pitch = 1.1f - Random.value / 5f;
+        RoarSource.pitch = 1.1f*BaseRoarPitch - Random.value*BaseRoarPitch / 5f;
         RoarSource.Play();
     }
 

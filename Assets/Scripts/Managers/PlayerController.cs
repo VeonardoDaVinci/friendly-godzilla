@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
     private float maxPlayerVelocity = 2f;
     private float maxHealth = 10f;
     private float playerHealth;
-
+    private Vector2 maxPlayerRange = new Vector2(13f, 10f);
     private float playerTilt = 0;
     private string playerTiltDirection = "left";
 
@@ -300,8 +300,19 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void IncreasePlayerRange(float range)
+    {
+        maxPlayerRange.x += range*(4f/3f);
+        maxPlayerRange.y += range;
+    }
+
+    public void IncreasePlayerSize(float size)
+    {
+        gameObject.transform.DOScale(gameObject.transform.localScale.x+size, 0.5f);
+    }
+
     private void LimitPlayerPosition()
     {
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -13f, 13f),transform.position.y, Mathf.Clamp(transform.position.z, -10f, 10f));
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -maxPlayerRange.x, maxPlayerRange.x),transform.position.y, Mathf.Clamp(transform.position.z, -maxPlayerRange.y, maxPlayerRange.y));
     }
 }

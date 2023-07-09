@@ -21,6 +21,13 @@ public class RandomizationManager : Singleton<RandomizationManager>
         SpawnRangeZ = (SpawnRange.size.z*0.9f) / 2f;
         SpawnNewObject();
     }
+
+    public void IncreaseSpawnRange(float range)
+    {
+        SpawnRangeX += range * (4f / 3f);
+        SpawnRangeZ += range;
+    }
+
     public void SpawnNewObject()
     {
         if (!anySpaceLeft || ObjectsSpawned.Count>=25) { SceneManager.LoadScene(2); }
