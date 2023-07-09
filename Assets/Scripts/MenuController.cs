@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class MenuController : MonoBehaviour
 {
+    // :)
     public void PlayClick()
     {
         SoundManager.Instance.PlayClick();
