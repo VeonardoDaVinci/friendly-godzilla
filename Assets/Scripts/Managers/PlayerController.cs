@@ -128,7 +128,7 @@ public class PlayerController : MonoBehaviour
         float tiltForce = 25f + (50f * (Mathf.Abs(playerVelocity) / 3)); // 25,30,3 = values that were meant to make tilting look good. but they should be still adjusted
 
         if(standingUpInProgress) {
-            tiltForce *= maxPlayerVelocity;
+            tiltForce *= 1 + Mathf.Abs(playerTilt)/10;
         }
 
         if(Mathf.Abs(playerTilt) >= tiltCriticalRangeForFalling && !standingUpInProgress) { // you dead bro
@@ -192,7 +192,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // movin` so tiltin`
-        if(forwardVelocityValue != 0 || rotationValue != 0) {
+        if(playerVelocity != 0 || rotationValue != 0) {
             if(playerTiltDirection == "left") {
                 playerTilt += tiltForce * Time.deltaTime;
             }
@@ -210,7 +210,7 @@ public class PlayerController : MonoBehaviour
         leftLeg.transform.localEulerAngles = rotationLeftLeg;
 
         // not movin` so straightin` up
-        if(forwardVelocityValue == 0 && rotationValue == 0) {
+        if(playerVelocity == 0 && rotationValue == 0) {
             float newTilt;
 
             if(playerTilt < 0) {
