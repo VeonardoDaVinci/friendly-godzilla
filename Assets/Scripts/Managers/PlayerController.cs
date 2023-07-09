@@ -127,6 +127,10 @@ public class PlayerController : MonoBehaviour
         float tiltCriticalRangeForFalling = 35f; // just an arbitrary tilt max value
         float tiltForce = 25f + (50f * (Mathf.Abs(playerVelocity) / 3)); // 25,30,3 = values that were meant to make tilting look good. but they should be still adjusted
 
+        if(standingUpInProgress) {
+            tiltForce *= maxPlayerVelocity;
+        }
+
         if(Mathf.Abs(playerTilt) >= tiltCriticalRangeForFalling && !standingUpInProgress) { // you dead bro
 
             float newTiltForFalling;
