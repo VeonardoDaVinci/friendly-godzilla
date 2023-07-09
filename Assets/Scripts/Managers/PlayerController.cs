@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
     private string playerTiltDirection = "left";
 
     private bool standingUpInProgress = false;
+    bool canPlayShake = true;
 
     void Awake()
     {
@@ -109,7 +110,7 @@ public class PlayerController : MonoBehaviour
 
               if(newTiltForFalling > 90) {
                   playerTilt = 90;
-                  Camera.main.transform.DOShakePosition(0.1f,1,50);
+                  DoWalkingShakeWithShakeDebounce(1f);
               } else {
                   playerTilt = newTiltForFalling;
               }
@@ -225,12 +226,25 @@ public class PlayerController : MonoBehaviour
         LimitPlayerPosition();
     }
 
-    private void DoWalkingShakeWithShakeDebounce()
+    private IEnumerator PlayShake(float time, float strength)
     {
+        canPlayShake = false;
+
+        Camera.main.transform.DOShakePosition(time, strength, 50);
+        SoundManager.Instance.PlayThud();
         Debug.Log("do shake !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
-        Camera.main.transform.DOShakePosition(0.1f,0.1f,50);
-        SoundManager.Instance.PlayThud();
+        yield return new WaitForSeconds(time);
+
+        canPlayShake = true;
+    }
+
+    private void DoWalkingShakeWithShakeDebounce(float strength = 0.1f)
+    {
+        if (canPlayShake)
+        {
+            StartCoroutine(PlayShake(0.1f, strength));
+        }
     }
 
     private void MovementStart(InputAction.CallbackContext callbackContext)
